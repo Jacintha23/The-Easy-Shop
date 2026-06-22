@@ -1,5 +1,6 @@
 package org.yearup.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Category;
@@ -17,13 +18,19 @@ import java.util.List;
 public class CategoriesController
 {
     private CategoryService categoryService;
-    private ProductService productService;
 
-    //@Autowired // create an Autowired constructor to inject the categoryService and productService
-    //    public CategoriesController(CategoriesService categoriesService)
-    //    {
-    //        this.categoriesService = categoriesService;
-    //    }
+    @Autowired // create an Autowired constructor to inject the categoryService and productService
+    public CategoriesController(CategoryService categoryService)
+      {
+          this.categoryService = categoryService;
+      }
+
+    private ProductService productService;
+    public CategoriesController(ProductService productService)
+    {
+        this.productService = productService;
+    }
+
 
 
     // add the appropriate annotation for a get action
