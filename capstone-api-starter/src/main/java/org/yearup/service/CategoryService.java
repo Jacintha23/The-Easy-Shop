@@ -37,8 +37,8 @@ public class CategoryService
 
     public Category update(int categoryId, Category category)
     {
-       //var category = category.setCategoryId(categoryId);
-        return categoryRepository.save(category);               // update category and return the updated category
+        category.setCategoryId(categoryId);
+        return categoryRepository.save(category);              // update category and return the updated category
     }
 
     public void delete(int categoryId)
