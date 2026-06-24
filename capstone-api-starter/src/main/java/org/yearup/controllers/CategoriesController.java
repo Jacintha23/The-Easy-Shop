@@ -80,7 +80,7 @@ public class CategoriesController
     @PreAuthorize(("hasRole('ROLE_ADMIN')"))                                             // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Void> deleteCategory(@PathVariable int id)
     {
-        // delete the category by id and return status 204 No Content
-        return null;
+        categoryService.delete(id);                       // delete the category by id and return status 204 No Content
+        return ResponseEntity.noContent().build();            //NO_CONTENT
     }
 }

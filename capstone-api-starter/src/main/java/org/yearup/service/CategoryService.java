@@ -25,13 +25,13 @@ public class CategoryService
 
     public Category getById(int categoryId)
     {
-        // get category by id
-        return null;
+        var category = categoryRepository.getById(categoryId);                // get category by id
+        return categoryRepository.findById(categoryId).orElse(null);
     }
 
     public Category create(Category category)
     {
-        // create a new category
+        var newCategory =                                             // create a new category
         return null;
     }
 
