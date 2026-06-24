@@ -1,7 +1,9 @@
 package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
@@ -18,57 +20,58 @@ import java.util.List;
 public class CategoriesController
 {
     private CategoryService categoryService;
-
-    @Autowired // create an Autowired constructor to inject the categoryService and productService
-    public CategoriesController(CategoryService categoryService)
-      {
-          this.categoryService = categoryService;
-      }
-
     private ProductService productService;
-    public CategoriesController(ProductService productService)
+
+    // create an Autowired constructor to inject the categoryService and productService
+    @Autowired
+    public CategoriesController(CategoryService categoryService, ProductService productService)
     {
+        this.categoryService = categoryService;
         this.productService = productService;
     }
-
-
-
     // add the appropriate annotation for a get action
-    public List<Category> getAll()
+
+    @GetMapping("")                                // add the appropriate annotation for a get action
+    public ResponseEntity<List<Category>> getAll()
+    // find and return all categories
     {
-        // find and return all categories
-        return null;
+        var categories = categoryService.findAllCategories();
+
+        return ResponseEntity.ok(categories);
     }
 
-    // add the appropriate annotation for a get action
-    public Category getById(@PathVariable int id)
+
+    @GetMapping("{id}")      // add the appropriate annotation for a get action
+    public ResponseEntity<Category> getById(@PathVariable int id)
     {
-        // get the category by id
-        return null;
+
+        var category = categoryService.getById(id);  // get the category by id
+
+        return ResponseEntity.ok(category);
     }
 
     // the url to return all products in category 1 would look like this
     // https://localhost:8080/categories/1/products
     @GetMapping("{categoryId}/products")
-    public List<Product> getProductsById(@PathVariable int categoryId)
+    public ResponseEntity<List<Product>> getProductsById(@PathVariable int categoryId)
     {
-        // get a list of product by categoryId
-        return null;
+        var products = productService.listByCategoryId(categoryId);  // get a list of product by categoryId, refer to Product Service
+        return ResponseEntity.ok(products);
     }
 
-    // add annotation to call this method for a POST action
-    // add annotation to ensure that only an ADMIN can call this function
+    @PostMapping ("")                                           // add annotation to call this method for a POST action
+    @PreAuthorize(("hasRole('admin')"))                    // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Category> addCategory(@RequestBody Category category)
     {
-        // insert the category and return it with status 201 Created
-        return null;
+        var newCategory = categoryService.create(category);     // insert the category and return it with status 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
     }
 
-    // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    @PutMapping("{id}")                                       // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
+    @PreAuthorize(("hasRole('admin')"))                  // add annotation to ensure that only an ADMIN can call this function
     public Category updateCategory(@PathVariable int id, @RequestBody Category category)
     {
-        // update the category by id and return the updated category (200 OK)
+                                             // update the category by id and return the updated category (200 OK)
         return null;
     }
 

@@ -32,6 +32,7 @@ public class ProductsController
         return productService.search(categoryId, minPrice, maxPrice, subCategory);
     }
 
+    // localhost:8080/products/id
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
     public Product getById(@PathVariable int id)

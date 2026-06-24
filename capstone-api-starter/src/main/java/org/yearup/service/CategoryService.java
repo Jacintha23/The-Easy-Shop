@@ -16,10 +16,11 @@ public class CategoryService
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getAllCategories()
+    public List<Category> findAllCategories()
     {
-        // get all categories
-        return null;
+        var categories = categoryRepository.findAll();
+
+        return categories;
     }
 
     public Category getById(int categoryId)
@@ -44,4 +45,6 @@ public class CategoryService
     {
         // delete category
     }
+
+
 }
