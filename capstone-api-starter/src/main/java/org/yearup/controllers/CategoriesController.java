@@ -70,8 +70,8 @@ public class CategoriesController
     @PreAuthorize(("hasRole('ROLE_ADMIN')"))                  // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category)
     {
-        var newCategory = categoryService.update(id, category);   // update the category by id,
-        return ResponseEntity.status(HttpStatus.OK).body(newCategory); // and return the updated category (200 OK)
+        Category updatedCategory = categoryService.update(id, category);   // update the category by id,
+        return ResponseEntity.ok(updatedCategory);         // and return the updated category (200 OK)
     }
 
 
