@@ -60,24 +60,24 @@ public class CategoriesController
     }
 
     @PostMapping ("")                                           // add annotation to call this method for a POST action
-    @PreAuthorize(("hasRole('admin')"))                    // add annotation to ensure that only an ADMIN can call this function
+    @PreAuthorize(("hasRole('ROLE_ADMIN')"))                    // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Category> addCategory(@RequestBody Category category)
     {
-        var newCategory = categoryService.create(category);     // insert the category and return it with status 201 Created
-        return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
+        var newCategory = categoryService.create(category);     // insert the category,
+        return ResponseEntity.status(HttpStatus.CREATED).body(newCategory); //  and return it with status 201 Created
     }
 
-    @PutMapping("{id}")                                       // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
-    @PreAuthorize(("hasRole('admin')"))                  // add annotation to ensure that only an ADMIN can call this function
-    public Category updateCategory(@PathVariable int id, @RequestBody Category category)
+    @PutMapping("{id}")                                    // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
+    @PreAuthorize(("hasRole('ROLE_ADMIN')"))                  // add annotation to ensure that only an ADMIN can call this function
+    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category)
     {
-                                             // update the category by id and return the updated category (200 OK)
-        return null;
+        var newCategory = categoryService.update(id, category);   // update the category by id, and return the updated category (200 OK)
+        return ResponseEntity.status(HttpStatus.OK).body(newCategory); // and return the updated category (200 OK)
     }
 
 
-    // add annotation to call this method for a DELETE action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    @DeleteMapping({"id"})                         // add annotation to call this method for a DELETE action - the url path must include the categoryId
+    @PreAuthorize(("hasRole('ROLE_ADMIN')"))                                             // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Void> deleteCategory(@PathVariable int id)
     {
         // delete the category by id and return status 204 No Content
