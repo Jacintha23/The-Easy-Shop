@@ -31,19 +31,19 @@ public class CategoryService
 
     public Category create(Category category)
     {
-        var newCategory =                                             // create a new category
-        return null;
+        //var newCategory =                                             // create a new category
+        return categoryRepository.save(category);
     }
 
     public Category update(int categoryId, Category category)
     {
-        // update category and return the updated category
-        return null;
+       //var category = category.setCategoryId(categoryId);
+        return categoryRepository.save(category);               // update category and return the updated category
     }
 
     public void delete(int categoryId)
     {
-        // delete category
+        categoryRepository.deleteById(categoryId);                // delete category
     }
 
 

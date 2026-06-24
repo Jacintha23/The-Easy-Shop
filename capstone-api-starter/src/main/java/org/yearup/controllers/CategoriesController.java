@@ -29,7 +29,6 @@ public class CategoriesController
         this.categoryService = categoryService;
         this.productService = productService;
     }
-    // add the appropriate annotation for a get action
 
     @GetMapping("")                                // add the appropriate annotation for a get action
     public ResponseEntity<List<Category>> getAll()
@@ -44,10 +43,10 @@ public class CategoriesController
     @GetMapping("{id}")      // add the appropriate annotation for a get action
     public ResponseEntity<Category> getById(@PathVariable int id)
     {
-
-        var category = categoryService.getById(id);  // get the category by id
-
+        var category =  categoryService.getById(id); // get the category by id
+        if(category == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(category);
+
     }
 
     // the url to return all products in category 1 would look like this
@@ -71,7 +70,7 @@ public class CategoriesController
     @PreAuthorize(("hasRole('ROLE_ADMIN')"))                  // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category)
     {
-        var newCategory = categoryService.update(id, category);   // update the category by id, and return the updated category (200 OK)
+        var newCategory = categoryService.update(id, category);   // update the category by id,
         return ResponseEntity.status(HttpStatus.OK).body(newCategory); // and return the updated category (200 OK)
     }
 
