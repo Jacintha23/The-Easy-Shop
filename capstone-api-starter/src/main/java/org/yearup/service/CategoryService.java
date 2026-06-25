@@ -43,7 +43,10 @@ public class CategoryService
 
     public void delete(int categoryId)
     {
-        categoryRepository.deleteById(categoryId);                // delete category
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new RuntimeException("Category not found with id: " + categoryId);
+        }
+        categoryRepository.deleteById(categoryId);               // delete category
     }
 
 

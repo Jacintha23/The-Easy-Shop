@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
 import org.yearup.service.CategoryService;
 import org.yearup.service.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController //create a rest controller
@@ -35,7 +37,9 @@ public class CategoriesController
     // find and return all categories
     {
         var categories = categoryService.findAllCategories();
-
+        if (categories.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        // find and return all categories
         return ResponseEntity.ok(categories);
     }
 
@@ -52,10 +56,16 @@ public class CategoriesController
     // the url to return all products in category 1 would look like this
     // https://localhost:8080/categories/1/products
     @GetMapping("{categoryId}/products")
-    public ResponseEntity<List<Product>> getProductsById(@PathVariable int categoryId)
+    public List<Product> getProductsById(@PathVariable int categoryId)
     {
-        var products = productService.listByCategoryId(categoryId);  // get a list of product by categoryId, refer to Product Service
-        return ResponseEntity.ok(products);
+        var category = categoryService.getById(categoryId);
+        if(category == null) return new ArrayList<>();
+        // get a list of product by categoryId
+        return productService.listByCategoryId(categoryId);
+        
+
+        // var products = productService.listByCategoryId(categoryId);  // get a list of product by categoryId, refer to Product Service
+       //  return ResponseEntity.ok(products);
     }
 
     @PostMapping ("")                                           // add annotation to call this method for a POST action
@@ -75,11 +85,15 @@ public class CategoriesController
     }
 
 
-    @DeleteMapping({"id"})                         // add annotation to call this method for a DELETE action - the url path must include the categoryId
+    @DeleteMapping("{id}")                         // add annotation to call this method for a DELETE action - the url path must include the categoryId
     @PreAuthorize(("hasRole('ROLE_ADMIN')"))                                             // add annotation to ensure that only an ADMIN can call this function
     public ResponseEntity<Void> deleteCategory(@PathVariable int id)
     {
+        if (categoryService.getById(id) == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
         categoryService.delete(id);                       // delete the category by id and return status 204 No Content
-        return ResponseEntity.noContent().build();            //NO_CONTENT
+        return ResponseEntity.noContent().build();        //NO_CONTENT
     }
+
 }
