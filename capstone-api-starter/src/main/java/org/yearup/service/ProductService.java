@@ -56,7 +56,7 @@ public class ProductService
         existing.setSubCategory(product.getSubCategory());
         existing.setFeatured(product.isFeatured());
         existing.setImageUrl(product.getImageUrl());
-        existing.setStock(product.getStock());
+        existing.setStock(product.getStock()); // this will allow stock numbers to be updated
         return productRepository.save(existing);
     }
 
